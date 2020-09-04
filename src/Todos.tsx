@@ -9,8 +9,12 @@ export function Todos() {
   const [newTodo, setNewTodo] = useState("");
 
   const addNewTodo = () => {
-    setTodos((current) => [...current, { text: newTodo }]);
+    setTodos([...todos, { text: newTodo }]);
     setNewTodo("");
+  };
+
+  const removeTodoAt = (index: number) => {
+    setTodos(todos.filter((_, i) => i !== index));
   };
 
   return (
@@ -20,10 +24,13 @@ export function Todos() {
         value={newTodo}
         onChange={(event) => setNewTodo(event.target.value)}
       ></input>
-      <button onClick={addNewTodo}>add</button>
+      <button onClick={addNewTodo}>Add</button>
       <ul>
         {todos.map((todo, i) => (
-          <li key={i}>{todo.text}</li>
+          <div key={i}>
+            <li>{todo.text}</li>
+            <button onClick={() => removeTodoAt(i)}>Remove</button>
+          </div>
         ))}
       </ul>
     </div>
