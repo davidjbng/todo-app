@@ -1,6 +1,8 @@
 import { screen, render, fireEvent } from "@testing-library/react";
+import { rest } from "msw";
 import React from "react";
 import { Todos } from "./Todos";
+import { server } from "./__mocks__/server";
 
 test("should show input for new todo", () => {
   render(<Todos />);
@@ -34,9 +36,20 @@ test("should remove todo ", () => {
   const todoElement = screen.queryByText(todo);
   expect(todoElement).not.toBeInTheDocument();
 });
+test("should load todos", async () => {
+  server.use(
+    rest.get("/todos", (req, res, ctx) => {
+      return res(ctx.status(200), ctx.json([{ title: "test" }]));
+    })
+  );
+
+  render(<Todos />);
+
+  expect(await screen.findByText("test")).toBeInTheDocument();
+});
 
 function addTodo(input: HTMLElement) {
-  const addButton = screen.getByRole("button", { name: "Add" });
+  const addButton = screen.getByRole("button", { name: /add/i });
   const todo = "Test Todo";
   fireEvent.change(input, { target: { value: todo } });
   fireEvent.click(addButton);

@@ -1,15 +1,30 @@
-import React, { useState } from "react";
+import { sign } from "crypto";
+import React, { useEffect, useState } from "react";
 
 interface TodoItem {
-  text: string;
+  title: string;
 }
 
 export function Todos() {
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [newTodo, setNewTodo] = useState("");
 
+  useEffect(() => {
+    const abortController = new AbortController();
+    const loadTodos = async () => {
+      fetch("/todos", { signal: abortController.signal })
+        .then((response) => response.json())
+        .then((json) => setTodos(json))
+        .catch((error) => console.log(error));
+    };
+    loadTodos();
+    return () => {
+      abortController.abort();
+    };
+  }, []);
+
   const addNewTodo = () => {
-    setTodos([...todos, { text: newTodo }]);
+    setTodos([...todos, { title: newTodo }]);
     setNewTodo("");
   };
 
@@ -28,7 +43,7 @@ export function Todos() {
       <ul>
         {todos.map((todo, i) => (
           <div key={i}>
-            <li>{todo.text}</li>
+            <li>{todo.title}</li>
             <button onClick={() => removeTodoAt(i)}>Remove</button>
           </div>
         ))}
