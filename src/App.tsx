@@ -1,10 +1,10 @@
-import React from 'react';
-import './App.css';
-import { Todos } from './Todos';
+import React from "react";
+import "./App.css";
+import { Todos } from "./Todos";
 
 function App() {
   return (
-    <div>
+    <div className="app-container">
       <Todos></Todos>
     </div>
   );
