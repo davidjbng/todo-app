@@ -1,58 +1,29 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { rest } from "msw";
 import React from "react";
-import { Todos } from "./Todos";
-import { server } from "./__mocks__/server";
+import { Todo, Todos } from "./Todos";
 
-test("should show input for new todo", () => {
-  render(<Todos />);
-  const input = screen.getByPlaceholderText(/add something/i);
-  expect(input).toBeVisible();
+test("should show initial todos", () => {
+  const initialTodo: Todo = { title: "test", id: 1 };
+
+  render(<Todos initialTodos={[initialTodo]} />);
+
+  expect(screen.getByText(initialTodo.title)).toBeInTheDocument();
 });
-test("should add new todo", () => {
-  render(<Todos />);
+test("should add new todo and clear input", () => {
+  const { debug } = render(<Todos />);
+
   const input = screen.getByPlaceholderText(/add something/i);
-  const { todo } = addTodo(input);
+  fireEvent.change(input, { target: { value: "new todo" } });
+  fireEvent.click(screen.getByRole("button", { name: /add/i }));
 
-  const todoElement = screen.getByText(todo);
-
-  expect(todoElement).toBeVisible();
-});
-test("should clear new todo after adding", () => {
-  render(<Todos />);
-  const input = screen.getByPlaceholderText(/add something/i);
-  addTodo(input);
-
+  expect(screen.getByText("new todo")).toBeInTheDocument();
   expect(input).toHaveValue("");
 });
 test("should remove todo ", () => {
-  render(<Todos />);
-  const input = screen.getByPlaceholderText(/add something/i);
-  const { todo } = addTodo(input);
+  const todo: Todo = { title: "test", id: 1 };
+  render(<Todos initialTodos={[todo]} />);
 
-  const removeButton = screen.getByRole("button", { name: "Remove" });
-  fireEvent.click(removeButton);
+  fireEvent.click(screen.getByTestId("remove-todo"));
 
-  const todoElement = screen.queryByText(todo);
-  expect(todoElement).not.toBeInTheDocument();
+  expect(screen.queryByText(todo.title)).not.toBeInTheDocument();
 });
-test("should load todos", async () => {
-  server.use(
-    rest.get("/todos", (req, res, ctx) => {
-      return res(ctx.status(200), ctx.json([{ title: "test", id: 1 }]));
-    })
-  );
-
-  render(<Todos />);
-
-  expect(await screen.findByText("test")).toBeInTheDocument();
-});
-
-function addTodo(input: HTMLElement) {
-  const addButton = screen.getByRole("button", { name: /add/i });
-  const todo = "Test Todo";
-  fireEvent.change(input, { target: { value: todo } });
-  fireEvent.click(addButton);
-
-  return { todo };
-}

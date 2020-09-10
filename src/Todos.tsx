@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-interface Todo {
+export interface Todo {
   id: number;
   title: string;
 }
-
 type NewTodo = Omit<Todo, "id">;
 
-export function Todos() {
+interface Props {
+  initialTodos?: Todo[];
+}
+
+export function Todos({ initialTodos = [] }: Props) {
   const [todoInput, setTodoInput] = useState("");
-  const { todos, add, remove } = useTodos();
+  const { todos, add, remove } = useTodos(initialTodos);
 
   function addTodo() {
     add({ title: todoInput });
@@ -28,7 +31,9 @@ export function Todos() {
         {todos.map(({ title, id }) => (
           <div key={id}>
             <li>{title}</li>
-            <button onClick={() => remove(id)}>Remove</button>
+            <button data-testid="remove-todo" onClick={() => remove(id)}>
+              Remove
+            </button>
           </div>
         ))}
       </ul>
@@ -36,22 +41,8 @@ export function Todos() {
   );
 }
 
-function useTodos() {
-  const [todos, setTodos] = useState<Todo[]>([]);
-
-  useEffect(() => {
-    const abortController = new AbortController();
-    const loadTodos = async () => {
-      fetch("/todos", { signal: abortController.signal })
-        .then((response) => response.json())
-        .then((json) => setTodos(json))
-        .catch((error) => console.log(error));
-    };
-    loadTodos();
-    return () => {
-      abortController.abort();
-    };
-  }, []);
+function useTodos(initialTodos: Todo[] = []) {
+  const [todos, setTodos] = useState<Todo[]>(initialTodos);
 
   function add(newTodo: NewTodo): Todo {
     const todo = { ...newTodo, id: todos.length + 1 };
