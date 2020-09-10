@@ -1,4 +1,4 @@
-import { screen, render, fireEvent } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { rest } from "msw";
 import React from "react";
 import { Todos } from "./Todos";
@@ -39,7 +39,7 @@ test("should remove todo ", () => {
 test("should load todos", async () => {
   server.use(
     rest.get("/todos", (req, res, ctx) => {
-      return res(ctx.status(200), ctx.json([{ title: "test" }]));
+      return res(ctx.status(200), ctx.json([{ title: "test", id: 1 }]));
     })
   );
 

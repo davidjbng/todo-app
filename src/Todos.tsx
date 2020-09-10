@@ -1,12 +1,43 @@
 import React, { useEffect, useState } from "react";
 
-interface TodoItem {
+interface Todo {
+  id: number;
   title: string;
 }
 
+type NewTodo = Omit<Todo, "id">;
+
 export function Todos() {
-  const [todos, setTodos] = useState<TodoItem[]>([]);
-  const [newTodo, setNewTodo] = useState("");
+  const [todoInput, setTodoInput] = useState("");
+  const { todos, add, remove } = useTodos();
+
+  function addTodo() {
+    add({ title: todoInput });
+    setTodoInput("");
+  }
+
+  return (
+    <div>
+      <input
+        placeholder="Add something"
+        value={todoInput}
+        onChange={(event) => setTodoInput(event.target.value)}
+      ></input>
+      <button onClick={addTodo}>Add</button>
+      <ul>
+        {todos.map(({ title, id }) => (
+          <div key={id}>
+            <li>{title}</li>
+            <button onClick={() => remove(id)}>Remove</button>
+          </div>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function useTodos() {
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -22,31 +53,15 @@ export function Todos() {
     };
   }, []);
 
-  const addNewTodo = () => {
-    setTodos([...todos, { title: newTodo }]);
-    setNewTodo("");
-  };
+  function add(newTodo: NewTodo): Todo {
+    const todo = { ...newTodo, id: todos.length + 1 };
+    setTodos([...todos, todo]);
+    return todo;
+  }
 
-  const removeTodoAt = (index: number) => {
-    setTodos(todos.filter((_, i) => i !== index));
-  };
+  function remove(id: number) {
+    setTodos(todos.filter((todo) => todo.id !== id));
+  }
 
-  return (
-    <div>
-      <input
-        placeholder="Add something"
-        value={newTodo}
-        onChange={(event) => setNewTodo(event.target.value)}
-      ></input>
-      <button onClick={addNewTodo}>Add</button>
-      <ul>
-        {todos.map((todo, i) => (
-          <div key={i}>
-            <li>{todo.title}</li>
-            <button onClick={() => removeTodoAt(i)}>Remove</button>
-          </div>
-        ))}
-      </ul>
-    </div>
-  );
+  return { todos, add, remove };
 }
