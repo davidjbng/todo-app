@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { rest } from "msw";
 import React from "react";
 import { TodosWithServer } from "./TodosWithServer";
@@ -25,10 +26,8 @@ test("should add new todo with api", async () => {
   );
   render(<TodosWithServer />);
 
-  fireEvent.change(screen.getByPlaceholderText(/add something/i), {
-    target: { value: "new todo" },
-  });
-  fireEvent.click(screen.getByRole("button", { name: /add/i }));
+  userEvent.type(screen.getByPlaceholderText(/add something/i), "new todo");
+  userEvent.click(screen.getByRole("button", { name: /add/i }));
 
   expect(await screen.findByText("new todo")).toBeInTheDocument();
 });
