@@ -21,27 +21,38 @@ export function Todos({ initialTodos = [] }: Props) {
   }
 
   return (
-    <div>
-      <input
-        placeholder="Add something"
-        value={todoInput}
-        onChange={(event) => setTodoInput(event.target.value)}
-      ></input>
-      <button onClick={addTodo}>Add</button>
-      <ul>
+    <div className="container mx-auto p-8 max-w-md">
+      <div className="flex">
+        <input
+          className="px-2 py-1 bg-gray-100 placeholder-gray-700 rounded flex-grow mr-2"
+          placeholder="Add something"
+          value={todoInput}
+          onChange={(event) => setTodoInput(event.target.value)}
+        ></input>
+        <button
+          className="mx-2 px-2 py-1 bg-gray-100 hover:bg-gray-300 rounded ml-auto"
+          onClick={addTodo}
+        >
+          Add
+        </button>
+      </div>
+      <ul className="mt-2">
         {todos.map((todo) => (
-          <li key={todo.id}>
+          <li className="flex items-center" key={todo.id}>
             <input
+              className="mr-2 my-1"
               type="checkbox"
               onChange={(event) => setCompleted(todo, event.target.checked)}
               checked={todo.completed}
             ></input>
-            <div
-              style={{ textDecoration: todo.completed ? "line-through" : "" }}
-            >
+            <div className={`${todo.completed ? "line-through" : ""}`}>
               {todo.title}
             </div>
-            <button data-testid="remove-todo" onClick={() => remove(todo.id)}>
+            <button
+              className="mx-2 rounded ml-auto"
+              data-testid="remove-todo"
+              onClick={() => remove(todo.id)}
+            >
               Remove
             </button>
           </li>

@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 import { Todos } from "./Todos";
 
 const exampleTodos = [
@@ -22,7 +21,7 @@ const exampleTodos = [
 
 function App() {
   return (
-    <div className="app-container">
+    <div>
       <Todos initialTodos={exampleTodos}></Todos>
     </div>
   );
