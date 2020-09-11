@@ -6,8 +6,8 @@ import {
 import userEvent from "@testing-library/user-event";
 import { rest } from "msw";
 import React from "react";
+import { server } from "../__mocks__/server";
 import { TodosWithServer } from "./TodosWithServer";
-import { server } from "./__mocks__/server";
 
 test("should load todos", async () => {
   server.use(
