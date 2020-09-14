@@ -46,7 +46,7 @@ test("should remove todo ", () => {
   const todo: Todo = { title: "test", id: 1, completed: false };
   render(<Todos initialTodos={[todo]} />);
 
-  userEvent.click(screen.getByTestId("remove-todo"));
+  userEvent.click(screen.getByRole("button", { name: /remove/i }));
 
   expect(screen.queryByText(todo.title)).not.toBeInTheDocument();
 });

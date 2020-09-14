@@ -53,7 +53,7 @@ export function Todos({ initialTodos = [] }: Props) {
             </div>
             <button
               className="mx-2 ml-auto w-4 h-4"
-              data-testid="remove-todo"
+              title="remove"
               onClick={() => remove(todo.id)}
             >
               <svg
