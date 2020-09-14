@@ -25,6 +25,7 @@ test("should show completed state for todo", () => {
   render(<Todos initialTodos={[todo]} />);
 
   expect(screen.getByRole("checkbox")).toBeChecked();
+  expect(screen.getByText(todo.title)).toHaveClass("line-through");
 });
 test("should complete todo", () => {
   const todo: Todo = { title: "test", id: 1, completed: false };
@@ -42,7 +43,7 @@ test("should uncomplete todo", () => {
 
   expect(screen.getByRole("checkbox")).not.toBeChecked();
 });
-test("should remove todo ", () => {
+test("should remove todo", () => {
   const todo: Todo = { title: "test", id: 1, completed: false };
   render(<Todos initialTodos={[todo]} />);
 
