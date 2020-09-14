@@ -30,7 +30,7 @@ export function Todos({ initialTodos = [] }: Props) {
           onChange={(event) => setTodoInput(event.target.value)}
         ></input>
         <button
-          className="mx-2 px-2 py-1 bg-gray-100 hover:bg-gray-300 rounded ml-auto"
+          className="ml-auto px-2 py-1 bg-gray-100 hover:bg-gray-300 rounded"
           onClick={addTodo}
         >
           Add
@@ -38,7 +38,10 @@ export function Todos({ initialTodos = [] }: Props) {
       </div>
       <ul className="mt-2">
         {todos.map((todo) => (
-          <li className="flex items-center" key={todo.id}>
+          <li
+            className="p-2 rounded flex items-center hover:bg-gray-100"
+            key={todo.id}
+          >
             <input
               className="mr-2 my-1"
               type="checkbox"
@@ -49,11 +52,23 @@ export function Todos({ initialTodos = [] }: Props) {
               {todo.title}
             </div>
             <button
-              className="mx-2 rounded ml-auto"
+              className="mx-2 ml-auto w-4 h-4"
               data-testid="remove-todo"
               onClick={() => remove(todo.id)}
             >
-              Remove
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
             </button>
           </li>
         ))}
