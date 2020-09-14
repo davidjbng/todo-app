@@ -17,9 +17,6 @@
     "typescript": "^4.0.2"
   },
   "scripts": {
-    "build:tailwind": "tailwindcss build src/index.css -o src/tailwind.output.css",
-    "prestart": "npm run build:tailwind",
-    "prebuild": "npm run build:tailwind",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
