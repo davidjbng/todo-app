@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { TodoItem } from "./TodoItem";
 
 export interface Todo {
   id: number;
@@ -21,6 +22,8 @@ export function TodoList({ initialTodos = [], name = "" }: Props) {
     setTodoInput("");
   }
 
+  const completedTodos = todos.filter((todo) => todo.completed);
+
   return (
     <div className="container mx-auto p-8 max-w-md">
       <h2 className="text-xl mb-4">{name}</h2>
@@ -39,40 +42,26 @@ export function TodoList({ initialTodos = [], name = "" }: Props) {
         </button>
       </div>
       <ul className="mt-2">
-        {todos.map((todo) => (
-          <li
-            className="p-2 rounded flex items-center hover:bg-gray-100"
+        {todos
+          .filter((todo) => !todo.completed)
+          .map((todo) => (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              remove={remove}
+              setCompleted={setCompleted}
+            ></TodoItem>
+          ))}
+      </ul>
+      <h3 className="text-sm mt-2">Completed</h3>
+      <ul>
+        {completedTodos.map((todo) => (
+          <TodoItem
             key={todo.id}
-          >
-            <input
-              className="mr-2 my-1"
-              type="checkbox"
-              onChange={(event) => setCompleted(todo, event.target.checked)}
-              checked={todo.completed}
-            ></input>
-            <div className={`${todo.completed ? "line-through" : ""}`}>
-              {todo.title}
-            </div>
-            <button
-              className="mx-2 ml-auto w-4 h-4"
-              title="remove"
-              onClick={() => remove(todo.id)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </li>
+            todo={todo}
+            remove={remove}
+            setCompleted={setCompleted}
+          ></TodoItem>
         ))}
       </ul>
     </div>

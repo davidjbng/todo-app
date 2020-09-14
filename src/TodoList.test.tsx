@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { queryByText, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { Todo, TodoList } from "./TodoList";
@@ -25,7 +25,6 @@ test("should show completed state for todo", () => {
   render(<TodoList initialTodos={[todo]} />);
 
   expect(screen.getByRole("checkbox")).toBeChecked();
-  expect(screen.getByText(todo.title)).toHaveClass("line-through");
 });
 test("should complete todo", () => {
   const todo: Todo = { title: "test", id: 1, completed: false };
@@ -55,4 +54,14 @@ test("should show todo list name", () => {
   render(<TodoList name="todolist" />);
 
   expect(screen.getByText("todolist")).toBeInTheDocument();
+});
+test("should display completed todo at the bottom", () => {
+  const completedTodo: Todo = { title: "completed", id: 1, completed: true };
+  const todo: Todo = { title: "other", id: 2, completed: false };
+  const otherTodo: Todo = { title: "other2", id: 3, completed: false };
+  render(<TodoList initialTodos={[completedTodo, todo, otherTodo]} />);
+
+  const [, , todo3] = screen.getAllByRole("listitem");
+
+  expect(queryByText(todo3, completedTodo.title)).toBeInTheDocument();
 });
