@@ -65,3 +65,13 @@ test("should display completed todo at the bottom", () => {
 
   expect(queryByText(todo3, completedTodo.title)).toBeInTheDocument();
 });
+test("should toggle completed todos", () => {
+  const completedTodo: Todo = { title: "completed", id: 1, completed: true };
+  render(<TodoList initialTodos={[completedTodo]} />);
+
+  userEvent.click(screen.getByRole("button", { name: /completed/i }));
+  expect(screen.queryByText(completedTodo.title)).not.toBeInTheDocument();
+
+  userEvent.click(screen.getByRole("button", { name: /completed/i }));
+  expect(screen.getByText(completedTodo.title)).toBeInTheDocument();
+});

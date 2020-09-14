@@ -16,6 +16,7 @@ interface Props {
 export function TodoList({ initialTodos = [], name = "" }: Props) {
   const [todoInput, setTodoInput] = useState("");
   const { todos, add, remove, setCompleted } = useTodos(initialTodos);
+  const [showCompleted, setShowCompleted] = useState(true);
 
   function addTodo() {
     add({ title: todoInput });
@@ -53,17 +54,51 @@ export function TodoList({ initialTodos = [], name = "" }: Props) {
             ></TodoItem>
           ))}
       </ul>
-      <h3 className="text-sm mt-2">Completed</h3>
-      <ul>
-        {completedTodos.map((todo) => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            remove={remove}
-            setCompleted={setCompleted}
-          ></TodoItem>
-        ))}
-      </ul>
+      <button
+        className="text-sm mt-2 flex items-center"
+        onClick={() => setShowCompleted((current) => !current)}
+      >
+        Completed
+        {showCompleted ? (
+          <svg
+            className="w-4 h-4"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+        ) : (
+          <svg
+            className="w-4 h-4"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+        )}
+      </button>
+      {showCompleted && (
+        <ul>
+          {completedTodos.map((todo) => (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              remove={remove}
+              setCompleted={setCompleted}
+            ></TodoItem>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
