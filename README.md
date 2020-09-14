@@ -9,9 +9,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ### Simple Requirements
 
 1. The user should be able to **add** a new todo
-2. The Todo list should **display a list** of existing todos
+2. The user should see **a list** of existing todos
 3. The user should be able to **complete** a todo
-4. Completed should appear as **striked through**
+4. Completed todos should appear as **striked through**
 5. The user should be able to **delete** an existing todo
 
 ### Advanced Requirements
