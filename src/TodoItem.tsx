@@ -1,5 +1,5 @@
-import { Todo } from "examples/TodosWithServer";
 import React from "react";
+import { Todo } from "TodoList";
 
 export interface Props {
   todo: Todo;
