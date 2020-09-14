@@ -8,10 +8,11 @@ export interface Todo {
 type NewTodo = Omit<Todo, "id" | "completed">;
 
 interface Props {
+  name?: string;
   initialTodos?: Todo[];
 }
 
-export function Todos({ initialTodos = [] }: Props) {
+export function TodoList({ initialTodos = [], name = "" }: Props) {
   const [todoInput, setTodoInput] = useState("");
   const { todos, add, remove, setCompleted } = useTodos(initialTodos);
 
@@ -22,6 +23,7 @@ export function Todos({ initialTodos = [] }: Props) {
 
   return (
     <div className="container mx-auto p-8 max-w-md">
+      <h2 className="text-xl mb-4">{name}</h2>
       <div className="flex">
         <input
           className="px-2 py-1 bg-gray-100 placeholder-gray-700 rounded flex-grow mr-2"

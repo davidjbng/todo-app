@@ -1,5 +1,5 @@
 import React from "react";
-import { Todos } from "./Todos";
+import { TodoList } from "./TodoList";
 
 const exampleTodos = [
   {
@@ -22,7 +22,7 @@ const exampleTodos = [
 function App() {
   return (
     <div>
-      <Todos initialTodos={exampleTodos}></Todos>
+      <TodoList name="Example Todos" initialTodos={exampleTodos}></TodoList>
     </div>
   );
 }

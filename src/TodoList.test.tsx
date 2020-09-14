@@ -1,17 +1,17 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
-import { Todo, Todos } from "./Todos";
+import { Todo, TodoList } from "./TodoList";
 
 test("should show initial todos", () => {
   const initialTodo: Todo = { title: "test", id: 1, completed: false };
 
-  render(<Todos initialTodos={[initialTodo]} />);
+  render(<TodoList initialTodos={[initialTodo]} />);
 
   expect(screen.getByText(initialTodo.title)).toBeInTheDocument();
 });
 test("should add new todo and clear input", () => {
-  render(<Todos />);
+  render(<TodoList />);
 
   const input = screen.getByPlaceholderText(/add something/i);
   userEvent.type(input, "new todo");
@@ -22,14 +22,14 @@ test("should add new todo and clear input", () => {
 });
 test("should show completed state for todo", () => {
   const todo: Todo = { title: "test", id: 1, completed: true };
-  render(<Todos initialTodos={[todo]} />);
+  render(<TodoList initialTodos={[todo]} />);
 
   expect(screen.getByRole("checkbox")).toBeChecked();
   expect(screen.getByText(todo.title)).toHaveClass("line-through");
 });
 test("should complete todo", () => {
   const todo: Todo = { title: "test", id: 1, completed: false };
-  render(<Todos initialTodos={[todo]} />);
+  render(<TodoList initialTodos={[todo]} />);
 
   userEvent.click(screen.getByRole("checkbox"));
 
@@ -37,7 +37,7 @@ test("should complete todo", () => {
 });
 test("should uncomplete todo", () => {
   const todo: Todo = { title: "test", id: 1, completed: true };
-  render(<Todos initialTodos={[todo]} />);
+  render(<TodoList initialTodos={[todo]} />);
 
   userEvent.click(screen.getByRole("checkbox"));
 
@@ -45,9 +45,14 @@ test("should uncomplete todo", () => {
 });
 test("should remove todo", () => {
   const todo: Todo = { title: "test", id: 1, completed: false };
-  render(<Todos initialTodos={[todo]} />);
+  render(<TodoList initialTodos={[todo]} />);
 
   userEvent.click(screen.getByRole("button", { name: /remove/i }));
 
   expect(screen.queryByText(todo.title)).not.toBeInTheDocument();
+});
+test("should show todo list name", () => {
+  render(<TodoList name="todolist" />);
+
+  expect(screen.getByText("todolist")).toBeInTheDocument();
 });
