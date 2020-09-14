@@ -2,28 +2,31 @@
 
 A simple Todo App with test examples for [React Testing Library](https://github.com/testing-library/react-testing-library)
 
-## Specification
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Todo List Kata
 
 ### Simple Requirements
 
-The user should be able to
-
-1. Add a new todo
-2. See a list of existing todos
-3. Complete a todo
-4. Delete an existing todo
+1. The user should be able to **add** a new todo
+2. The Todo list should **display a list** of existing todos
+3. The user should be able to **complete** a todo
+4. Completed should appear as **striked through**
+5. The user should be able to **delete** an existing todo
 
 ### Advanced Requirements
 
-It should also be possible to
+1. Completed todos should be displayed at the bottom
+2. The user should be able to **hide** completed todos
+3. The user should be able to **edit** an existing todo
 
-1. Edit an existing todo
-2. Hide completed todos
-3. Add multiple todo lists
+### Multiple Todo Lists
 
-## Development
+1. The user should be able to add a **new todo list**
+2. The user should **see all** existing todo lists
+3. The user should be able to **switch** between existing todo lists
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Available Scripts
 
 In the project directory, you can run:
 
