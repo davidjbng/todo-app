@@ -1,4 +1,4 @@
-import { queryByText, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { Todo, TodoList } from "./TodoList";
@@ -50,47 +50,21 @@ test("should remove todo", () => {
 
   expect(screen.queryByText(todo.title)).not.toBeInTheDocument();
 });
-test("should show todo list name", () => {
-  render(<TodoList name="todolist" />);
-
-  expect(screen.getByText("todolist")).toBeInTheDocument();
-});
-test("should display completed todo at the bottom", () => {
-  const completedTodo: Todo = { title: "completed", id: "1", completed: true };
-  const todo: Todo = { title: "other", id: "2", completed: false };
-  const otherTodo: Todo = { title: "other2", id: "3", completed: false };
-  render(<TodoList initialTodos={[completedTodo, todo, otherTodo]} />);
-
-  const [, , todo3] = screen.getAllByRole("listitem");
-
-  expect(queryByText(todo3, completedTodo.title)).toBeInTheDocument();
-});
-test("should toggle completed todos", () => {
-  const completedTodo: Todo = { title: "completed", id: "1", completed: true };
-  render(<TodoList initialTodos={[completedTodo]} />);
-
-  userEvent.click(screen.getByRole("button", { name: /completed/i }));
-  expect(screen.queryByText(completedTodo.title)).not.toBeInTheDocument();
-
-  userEvent.click(screen.getByRole("button", { name: /completed/i }));
-  expect(screen.getByText(completedTodo.title)).toBeInTheDocument();
-});
 test("should allow removing, adding and then removing a todo", () => {
   const initialTodos: Todo[] = [
     { title: "test1", id: "0", completed: false },
-    { title: "test2", id: "1", completed: false }
-  ]
+    { title: "test2", id: "1", completed: false },
+  ];
   render(<TodoList initialTodos={initialTodos} />);
 
-  userEvent.click(screen.getAllByRole("button", { name: /remove/i })[0])
+  userEvent.click(screen.getAllByRole("button", { name: /remove/i })[0]);
 
   const input = screen.getByPlaceholderText(/add something/i);
   userEvent.type(input, "new todo");
   userEvent.click(screen.getByRole("button", { name: /add/i }));
 
-  userEvent.click(screen.getAllByRole("button", { name: /remove/i })[0])
+  userEvent.click(screen.getAllByRole("button", { name: /remove/i })[0]);
 
-  
   expect(screen.queryByText("test1")).not.toBeInTheDocument();
   expect(screen.queryByText("test2")).not.toBeInTheDocument();
   expect(screen.getByText("new todo")).toBeInTheDocument();
