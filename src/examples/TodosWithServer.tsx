@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 export interface Todo {
-  id: number;
+  id: string;
   title: string;
   completed: boolean;
 }
@@ -90,7 +90,7 @@ function useTodos() {
     }
   }
 
-  async function remove(id: number) {
+  async function remove(id: string) {
     try {
       await fetch(`/todos/${id}`, { method: "delete" });
       setTodos(todos.filter((todo) => todo.id !== id));

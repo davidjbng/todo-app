@@ -4,7 +4,7 @@ import React from "react";
 export interface Props {
   todo: Todo;
   setCompleted: (todo: Todo, completed: boolean) => void;
-  remove: (id: number) => void;
+  remove: (id: string) => void;
 }
 
 export function TodoItem(props: Props) {

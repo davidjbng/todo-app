@@ -4,7 +4,7 @@ import React from "react";
 import { Todo, TodoList } from "./TodoList";
 
 test("should show initial todos", () => {
-  const initialTodo: Todo = { title: "test", id: 1, completed: false };
+  const initialTodo: Todo = { title: "test", id: "1", completed: false };
 
   render(<TodoList initialTodos={[initialTodo]} />);
 
@@ -21,13 +21,13 @@ test("should add new todo and clear input", () => {
   expect(input).toHaveValue("");
 });
 test("should show completed state for todo", () => {
-  const todo: Todo = { title: "test", id: 1, completed: true };
+  const todo: Todo = { title: "test", id: "1", completed: true };
   render(<TodoList initialTodos={[todo]} />);
 
   expect(screen.getByRole("checkbox")).toBeChecked();
 });
 test("should complete todo", () => {
-  const todo: Todo = { title: "test", id: 1, completed: false };
+  const todo: Todo = { title: "test", id: "1", completed: false };
   render(<TodoList initialTodos={[todo]} />);
 
   userEvent.click(screen.getByRole("checkbox"));
@@ -35,7 +35,7 @@ test("should complete todo", () => {
   expect(screen.getByRole("checkbox")).toBeChecked();
 });
 test("should uncomplete todo", () => {
-  const todo: Todo = { title: "test", id: 1, completed: true };
+  const todo: Todo = { title: "test", id: "1", completed: true };
   render(<TodoList initialTodos={[todo]} />);
 
   userEvent.click(screen.getByRole("checkbox"));
@@ -43,7 +43,7 @@ test("should uncomplete todo", () => {
   expect(screen.getByRole("checkbox")).not.toBeChecked();
 });
 test("should remove todo", () => {
-  const todo: Todo = { title: "test", id: 1, completed: false };
+  const todo: Todo = { title: "test", id: "1", completed: false };
   render(<TodoList initialTodos={[todo]} />);
 
   userEvent.click(screen.getByRole("button", { name: /remove/i }));
@@ -56,9 +56,9 @@ test("should show todo list name", () => {
   expect(screen.getByText("todolist")).toBeInTheDocument();
 });
 test("should display completed todo at the bottom", () => {
-  const completedTodo: Todo = { title: "completed", id: 1, completed: true };
-  const todo: Todo = { title: "other", id: 2, completed: false };
-  const otherTodo: Todo = { title: "other2", id: 3, completed: false };
+  const completedTodo: Todo = { title: "completed", id: "1", completed: true };
+  const todo: Todo = { title: "other", id: "2", completed: false };
+  const otherTodo: Todo = { title: "other2", id: "3", completed: false };
   render(<TodoList initialTodos={[completedTodo, todo, otherTodo]} />);
 
   const [, , todo3] = screen.getAllByRole("listitem");
@@ -66,7 +66,7 @@ test("should display completed todo at the bottom", () => {
   expect(queryByText(todo3, completedTodo.title)).toBeInTheDocument();
 });
 test("should toggle completed todos", () => {
-  const completedTodo: Todo = { title: "completed", id: 1, completed: true };
+  const completedTodo: Todo = { title: "completed", id: "1", completed: true };
   render(<TodoList initialTodos={[completedTodo]} />);
 
   userEvent.click(screen.getByRole("button", { name: /completed/i }));
@@ -74,4 +74,24 @@ test("should toggle completed todos", () => {
 
   userEvent.click(screen.getByRole("button", { name: /completed/i }));
   expect(screen.getByText(completedTodo.title)).toBeInTheDocument();
+});
+test("should allow removing, adding and then removing a todo", () => {
+  const initialTodos: Todo[] = [
+    { title: "test1", id: "0", completed: false },
+    { title: "test2", id: "1", completed: false }
+  ]
+  render(<TodoList initialTodos={initialTodos} />);
+
+  userEvent.click(screen.getAllByRole("button", { name: /remove/i })[0])
+
+  const input = screen.getByPlaceholderText(/add something/i);
+  userEvent.type(input, "new todo");
+  userEvent.click(screen.getByRole("button", { name: /add/i }));
+
+  userEvent.click(screen.getAllByRole("button", { name: /remove/i })[0])
+
+  
+  expect(screen.queryByText("test1")).not.toBeInTheDocument();
+  expect(screen.queryByText("test2")).not.toBeInTheDocument();
+  expect(screen.getByText("new todo")).toBeInTheDocument();
 });

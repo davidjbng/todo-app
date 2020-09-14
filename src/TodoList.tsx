@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { TodoItem } from "./TodoItem";
+import { v4 as uuidv4 } from 'uuid';
 
 export interface Todo {
-  id: number;
+  id: string;
   title: string;
   completed: boolean;
 }
@@ -107,12 +108,12 @@ function useTodos(initialTodos: Todo[] = []) {
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
 
   function add(newTodo: NewTodo): Todo {
-    const todo = { ...newTodo, completed: false, id: todos.length + 1 };
+    const todo = { ...newTodo, completed: false, id: uuidv4() };
     setTodos([...todos, todo]);
     return todo;
   }
 
-  function remove(id: number) {
+  function remove(id: string) {
     setTodos(todos.filter((todo) => todo.id !== id));
   }
 
